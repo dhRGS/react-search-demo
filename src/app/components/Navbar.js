@@ -21,7 +21,7 @@ export default class Navbar extends Component {
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Brand</a>
+            <a class="navbar-brand" href="#">{this.props.brandTitle}</a>
           </div>
       
           {/* Collect the nav links, forms, and other content for toggling */}

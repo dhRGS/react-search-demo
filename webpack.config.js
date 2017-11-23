@@ -1,6 +1,10 @@
 const debug = process.env.NODE_ENV !== "production";
 const webpack = require('webpack');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+//const extractCSS = new ExtractTextPlugin('styles.css');
 
 const DIST_DIR = path.resolve(__dirname, "dist");
 const SRC_DIR = path.resolve(__dirname, "src");
@@ -8,17 +12,18 @@ const SRC_DIR = path.resolve(__dirname, "src");
 var config = {
     entry: SRC_DIR + '/app/index.js',
     output: {
-       path: DIST_DIR + "/app",
-       filename: 'bundle.js',
+       path: DIST_DIR,
+       filename: 'app.bundle.js',
        publicPath: "/app/"
     },
+    devtool:'#source-map',
     devServer: {
        inline: true,
        port: 8080,
        contentBase: SRC_DIR
     },
     module: {
-      loaders: [
+      rules: [
         {
             test: /\.js?/,
             include: SRC_DIR,
@@ -30,38 +35,56 @@ var config = {
         },
         {
             test: /\.css$/,
-            use: [
-            'style-loader',
-            'css-loader'
-            ]
-        },
+            use: ExtractTextPlugin.extract({
+              fallback: 'style-loader',
+              use: 'css-loader'
+            })
+          },
+        // {
+        //     test: /\.css$/,
+        //     use: [
+        //     'style-loader',
+        //     'css-loader'
+        //     ]
+        // },
         {
             test: /\.ttf$/,
-            use: 'file-loader?name=[name].[ext]&outputPath=../fonts/&publicPath=../fonts/&mimetype=font/ttf'
+            use: 'file-loader?name=[name].[ext]&outputPath=../fonts/&publicPath=/&mimetype=font/ttf'
             /*test: /.woff$|.woff2$|.ttf$|.eot$|.svg$/,
             loader: 'file-loader'*/
         },
         {
             test: /\.woff$/,
-            use: 'file-loader?name=[name].[ext]&outputPath=../fonts/&publicPath=../fonts/&mimetype=font/woff'
+            use: 'file-loader?name=[name].[ext]&outputPath=../fonts/&publicPath=/&mimetype=font/woff'
         },
         {
             test: /\.woff2$/,
-            use: 'file-loader?name=[name].[ext]&outputPath=../fonts/&publicPath=../fonts/&mimetype=font/woff2'
+            use: 'file-loader?name=[name].[ext]&outputPath=../fonts/&publicPath=/&mimetype=font/woff2'
         },
         {
             test: /\.eot$/,
-            use: 'file-loader?name=[name].[ext]&outputPath=../fonts/&publicPath=../fonts/&mimetype=font/eot'
+            use: 'file-loader?name=[name].[ext]&outputPath=../fonts/&publicPath=/&mimetype=font/eot'
         },
         {
             test: /\.svg$/,
-            use: 'file-loader?name=[name].[ext]&outputPath=../fonts/&publicPath=../fonts/&mimetype=font/svg'
-        }//,
+            use: 'file-loader?name=[name].[ext]&outputPath=../fonts/&publicPath=/&mimetype=font/svg'
+        },
         // { test: /\.(jsx|js)$/,
         //     loader: 'imports-loader?jQuery=jquery,$=jquery,this=>window'
         // }
        ]
-    }
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            title: 'Semantic Search Project',
+            template: SRC_DIR + '/index.ejs',
+            minify: {
+                collapseWhitespace: true
+            },
+            hash: true
+        }),
+        new ExtractTextPlugin('style.css'),
+    ]
  }
  module.exports = config;
  
@@ -98,13 +121,7 @@ var config = {
 //             presets: ['env']
 //           }
 //         },
-//   /*      {
-//           test: /\.css/,
-//           use: ExtractTextPlugin.extract({
-//             fallbackLoader: 'style-loader',
-//             loader: 'css-loader'
-//           })
-//         },*/
+//   /*      ,*/
 //        {
 //           test: /\.css$/,
 //           use: [
@@ -182,3 +199,12 @@ var config = {
 
 //const path = require('path');
 
+
+
+// {
+//     test: /\.css$/,
+//     use: extractCSS.extract({
+//     fallback: 'style-loader',
+//     use: ['css-loader', 'url-loader', 'sass-loader']
+//     })
+// },
