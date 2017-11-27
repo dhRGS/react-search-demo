@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import shortid from 'shortid';
 
 // bootstrap 
-//import '../../node_modules/bootstrap/dist/css/bootstrap.css';
-//import $ from 'jquery';
-//import '../../node_modules/bootstrap/dist/js/bootstrap.js';
+import '../../node_modules/bootstrap/dist/css/bootstrap.css';
+import $ from 'jquery';
+import '../../node_modules/bootstrap/dist/js/bootstrap.js';
 // components
 import Header from './components/Header';
 import Navbar from './components/Navbar';
@@ -13,7 +13,7 @@ import ResultsListComponent from './components/ResultsListComponent';
 import SearchComponent from './components/Search-Component';
 // // assets 
 // import logo from './logo.svg';
-import './css/styles.css';
+import './css/styles.scss';
 
 export default class App extends Component {
     constructor(props, context){
@@ -48,24 +48,24 @@ export default class App extends Component {
   } //constructor
 
   toggleSearch() {
-    var tempVisibility = !this.state.searchVisibility;
+    let tempVisibility = !this.state.searchVisibility;
     this.setState({
       searchVisibility: tempVisibility
     });
 }
 searchSemantic(tempItem) {
-  console.log('searchSemantic triggered');
-  console.log(tempItem);
+  //console.log('searchSemantic triggered');
+  //console.log(tempItem);
   let semanticURL = 'http://podia2016.rgsit.com/Wcf/Publish.svc/json/SearchChapters?SearchString=' + tempItem.searchTerm + '&HitCount=' + tempItem.hitNumber;
   // get biz
   fetch(semanticURL)
             .then(results => {
                 return results.json();
-                console.log('results');
-                console.log(results.json);
+                //console.log('results');
+                //console.log(results.json);
             }).then(data => {
-              console.log('data from then');
-                console.log(data);                
+              //console.log('data from then');
+                //console.log(data);                
                 this.setState({data: data});
             }).catch(error => {
                 handleErrors(error);

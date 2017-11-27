@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 // shortId is easier for simple parent-level IDs
 import shortid from 'shortid';
+// get the SearchResultItemComponent to populate our list
+//import SearchResultItem from './components/SearchResultItemComponent';
 
 export default class ResultsListComponent extends Component {
     render() {

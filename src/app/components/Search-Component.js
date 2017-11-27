@@ -93,8 +93,7 @@ export default class SearchComponent extends Component {
     return (
         <div className="panel panel-danger">
         <div className="panel-heading" onClick={this.toggleSearchDisplay}>
-        <i className="glyphicon glyphicon-search"></i>
-           <h3>Run Semantic Search</h3>
+           <h3 className="linkHeader"><i className="glyphicon glyphicon-search"></i> Run Semantic Search</h3>
       </div>
       <div className="panel-body"  style={displaySearch}>
       <div className="row marginBottom">
