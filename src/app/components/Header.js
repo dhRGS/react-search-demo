@@ -11,7 +11,7 @@ import React, { Component } from 'react';
 export default class Header extends Component {
   render() {
     return (
-      <h1>Hi from the Header Component</h1>
+      <h1>This is an optional Header Component</h1>
     );
   }
 }

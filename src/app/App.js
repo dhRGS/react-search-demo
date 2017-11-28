@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-// shortId is easier for simple parent-level IDs
+// shortId is preferred key method for simple parent-level IDs
 import shortid from 'shortid';
 
-// bootstrap 
+// bootstrap for layout
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import $ from 'jquery';
 import '../../node_modules/bootstrap/dist/js/bootstrap.js';
-// components
+
+// lodash for array methods
+import _ from 'lodash';
+// REACT components 
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import ResultsListComponent from './components/ResultsListComponent';
@@ -14,12 +17,13 @@ import SearchComponent from './components/Search-Component';
 // // assets 
 // import logo from './logo.svg';
 import './css/styles.scss';
-
+// main App component
 export default class App extends Component {
     constructor(props, context){
         super(props, context);
         this.state = {
           brand: 'Podia',
+          firstRun: true,
           searchVisibility: false,
           searchPlaceholder: 'What would you like to search for?',
           data: [
@@ -45,6 +49,7 @@ export default class App extends Component {
     } //state
     this.toggleSearch = this.toggleSearch.bind(this);
     this.searchSemantic = this.searchSemantic.bind(this);
+    this.sortAlpha = this.sortAlpha.bind(this);
   } //constructor
 
   toggleSearch() {
@@ -57,7 +62,7 @@ searchSemantic(tempItem) {
   //console.log('searchSemantic triggered');
   //console.log(tempItem);
   let semanticURL = 'http://podia2016.rgsit.com/Wcf/Publish.svc/json/SearchChapters?SearchString=' + tempItem.searchTerm + '&HitCount=' + tempItem.hitNumber;
-  // get biz
+  // get data
   fetch(semanticURL)
             .then(results => {
                 return results.json();
@@ -65,15 +70,32 @@ searchSemantic(tempItem) {
                 //console.log(results.json);
             }).then(data => {
               //console.log('data from then');
-                //console.log(data);                
-                this.setState({data: data});
+                //console.log(data);               
+                this.setState({
+                  data: data,
+                  firstRun: false
+                });
             }).catch(error => {
                 handleErrors(error);
             })
 }
+sortAlpha(sortMethod) {
+  //console.log(sortMethod);
+  let newOrderData = _.sortBy(this.state.data, sortMethod);
+  //console.log(newOrderData);
+  //console.log(this.state.data);
+  this.setState({
+    data: newOrderData
+  });
+}
 
   render() {
     const hasData = this.state.data.length > 0;
+
+    const noSearchResults = {
+      display: this.props.firstRun ? 'block' : 'none'
+    }; 
+
     return (
       <div className="container-fluid">
         <Navbar
@@ -89,9 +111,10 @@ searchSemantic(tempItem) {
         <Header />
         {hasData ? (
           <ResultsListComponent
-          data={this.state.data} />
+          data={this.state.data}
+          sortFn={this.sortAlpha} />
       ) : (
-        <h3>Sorry, your search returned no results</h3>
+        <h3 style={noSearchResults}>Sorry, your search returned no results</h3>
       )}     
             </main>
       </div>
